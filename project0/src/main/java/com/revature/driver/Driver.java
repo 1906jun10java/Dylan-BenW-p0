@@ -1,11 +1,13 @@
 package com.revature.driver;
 
 import java.awt.Menu;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.revature.beans.Car;
 import com.revature.beans.User;
+import com.revature.daoimpl.UserDAOImpl;
 import com.revature.enums.UserType;
 import com.revature.enums.ConditionType;
 import com.revature.enums.OwnershipType;
@@ -15,30 +17,24 @@ public class Driver {
 	public static void main(String[] args) 
 	{
 		Scanner kb = new Scanner(System.in);
+		UserDAOImpl udi = new UserDAOImpl();
 		
-		ArrayList<User> users = new ArrayList<User>();
-		User user1 = new User("admin", "istrator", "admin", "passw0rd123", UserType.ADMIN);
-		User user2 = new User("Dylan", "Waser", "waserd", "passw0rd123", UserType.CUSTOMER);
-		User user3 = new User("Ben", "Wilson", "wilsonb", "passw0rd123", UserType.CUSTOMER);
-		User user4 = new User("Emily", "Higgins", "higginse", "catNamedMerlin", UserType.CUSTOMER);
-		users.add(user1);
-		users.add(user2);
-		users.add(user3);
-		users.add(user4);
+		ArrayList<User> users = udi.readAllUsers();
 
 		ArrayList<Car> carsOnLot = new ArrayList<Car>();
-		carsOnLot.add(new Car(1990, "Ford", "Fiesta", "Green", ConditionType.POOR));
-		carsOnLot.add(new Car(1991, "Toyota", "Camry", "Black", ConditionType.EXCELLENT));
-		carsOnLot.add(new Car(1992, "Chevrolet", "Corvette", "Blue", ConditionType.GOOD));
-		carsOnLot.add(new Car(1993, "Porsche", "Cayman", "Red", ConditionType.FAIR));
-		carsOnLot.add(new Car(1994, "Nissan", "Pathfinder", "Green", ConditionType.POOR));
-		carsOnLot.add(new Car(1995, "Ford", "Windstar", "Purple", ConditionType.GOOD));
-		carsOnLot.add(new Car(1996, "Chevrolet", "Tahoe", "White", ConditionType.GOOD));
-		carsOnLot.add(new Car(1997, "Toyota", "Sequoia", "Tan", ConditionType.EXCELLENT));
-		carsOnLot.add(new Car(1998, "Nissan", "Altima", "Orange", ConditionType.POOR));
-		carsOnLot.add(new Car(1999, "Ford", "Mustang", "Yellow", ConditionType.FAIR));
+	
+	/* THIS IS TO INSERT A NEW USER INTO DATABASE FROM AN EMPLOYEE ACCOUNT	
+		User todd = new User(users.size()+1, "Todd", "Stevens", "hottytoddy", "passw0rd123", 3);
+	
+		try {
+			udi.createUser("Todd", "Stevens", "hottytoddy", "passw0rd123", 3);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	*/
 		
-
+/*
 		System.out.println("Welcome to Ben & Dylan's car lot.");
 		User loggedIn = null;
 		
@@ -88,7 +84,7 @@ public class Driver {
 		System.out.println("Printing cars on the lot :" + carsOnLot.toString());
 
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++" + "\n" +
-							loggedIn.toString());
+							loggedIn.toString());  */
 	}
 
 }
