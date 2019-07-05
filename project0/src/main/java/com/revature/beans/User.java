@@ -6,17 +6,28 @@ import com.revature.enums.UserType;
 
 public class User {
 	
-	public User(String firstName, String lastName, String username, String password, UserType title) {
-		super();
+	public User(int userID, String firstName, String lastName, String username, String password, int titleNum) {
+		super();		
+		this.userID = userID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
 		this.password = password;
-		this.title = title;
+		switch(titleNum)
+		{
+		case 1:
+			this.title = UserType.ADMIN;
+			break;
+		case 2:
+			this.title = UserType.EMPLOYEE;
+			break;
+		case 3:
+			this.title = UserType.CUSTOMER;
+			break;
+		}
 	}
 
-	
-	
+	private int userID;
 	private String firstName;
 	private String lastName;
 	private String username;
@@ -35,6 +46,16 @@ public class User {
 
 	public void setOwnedCars(ArrayList<Car> ownedCars) {
 		this.ownedCars = ownedCars;
+	}
+	
+	public int getUserID()
+	{
+		return userID;
+	}
+	
+	public void setUserID(int userID)
+	{
+		this.userID = userID;
 	}
 	
 	public String getFirstName() {
@@ -69,8 +90,18 @@ public class User {
 		this.password = password;
 	}
 
-	public UserType getTitle() {
-		return title;
+	public int getTitle() {
+		switch(title)
+		{
+		case ADMIN:
+			return 1;
+		case EMPLOYEE:
+			return 2;
+		case CUSTOMER:
+			return 3;
+		default:
+			return 3;
+		}
 	}
 
 	public void setTitle(int titleNum) {
