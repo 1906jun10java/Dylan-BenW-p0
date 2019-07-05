@@ -6,13 +6,13 @@ import com.revature.enums.UserType;
 
 public class User {
 	
-	public User(String firstName, String lastName, String username, String password, UserType userType) {
+	public User(String firstName, String lastName, String username, String password, UserType title) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
 		this.password = password;
-		this.userType = userType;
+		this.title = title;
 	}
 
 	
@@ -21,7 +21,7 @@ public class User {
 	private String lastName;
 	private String username;
 	private String password;
-	private UserType userType = UserType.CUSTOMER;
+	private UserType title = UserType.CUSTOMER;
 	private ArrayList<Car> ownedCars = new ArrayList<Car>();
 	
 	
@@ -69,18 +69,29 @@ public class User {
 		this.password = password;
 	}
 
-	public UserType getUserType() {
-		return userType;
+	public UserType getTitle() {
+		return title;
 	}
 
-	public void setUserType(UserType userType) {
-		this.userType = userType;
+	public void setTitle(int titleNum) {
+		switch(titleNum)
+		{
+		case 1:
+			this.title = UserType.ADMIN;
+			break;
+		case 2:
+			this.title = UserType.EMPLOYEE;
+			break;
+		case 3:
+			this.title = UserType.CUSTOMER;
+			break;
+		}
 	}
 	
 	//methods
 	public void menu()
 	{
-		switch(userType)
+		switch(title)
 		{
 		case CUSTOMER:
 				System.out.println("Please select an option from below. I.E. 1,2,3" + "\n" +
@@ -110,7 +121,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", password="
-				+ password + ", userType=" + userType + ", ownedCars=" + ownedCars + "]";
+				+ password + ", userType=" + title + ", ownedCars=" + ownedCars + "]";
 	}
 
 	
