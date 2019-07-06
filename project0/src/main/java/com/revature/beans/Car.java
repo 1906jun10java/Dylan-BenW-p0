@@ -4,23 +4,42 @@ import com.revature.enums.ConditionType;
 import com.revature.enums.OwnershipType;
 
 public class Car {
-
-	//constructors
-	public Car() {
-		// TODO Auto-generated constructor stub
-	}
 	
-	public Car(int year, String make, String model, String color, ConditionType condition) {
+	public Car(int carID, String year, String make, String model, String color, int conditionNum, int ownershipTypeNum, int userID) {
 		super();
+		this.carID = carID;
 		this.year = year;
 		this.make = make;
 		this.model = model;
 		this.color = color;
-		this.condition = condition;
+		switch(conditionNum)
+		{
+		case 1:
+			this.condition = ConditionType.EXCELLENT;
+			break;
+		case 2: 
+			this.condition = ConditionType.GOOD; 
+			break;
+		case 3:
+			this.condition = ConditionType.FAIR; 
+			break;
+		case 4: 
+			this.condition = ConditionType.POOR;
+			break;
+		}
+		switch(ownershipTypeNum)
+		{
+		case 1: 
+			this.ownerShip = OwnershipType.OWNED;
+			break;
+		case 2: 
+			this.ownerShip = OwnershipType.FORSALE; 
+			break;
+		}
 	}
 
-
-	private int year;
+	private int carID;
+	private String year;
 	private String make;
 	private String model;
 	private String color;
@@ -36,11 +55,21 @@ public class Car {
 		this.ownerShip = ownerShip;
 	}
 	
-	public int getYear() {
+	public int getCarID()
+	{
+		return carID;
+	}
+	
+	public void setCarID(int carID)
+	{
+		this.carID = carID;
+	}
+	
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 
@@ -68,25 +97,75 @@ public class Car {
 		this.color = color;
 	}
 
-	public ConditionType getCondition() {
-		return condition;
+	public int getCondition() {
+		switch(condition)
+		{
+		case EXCELLENT: 
+			return 1;
+		case GOOD:
+			return 2;
+		case FAIR:
+			return 3;
+		case POOR:
+			return 4;
+		default:
+			return 2;
+		}
 	}
 
-	public void setCondition(ConditionType condition) {
-		this.condition = condition;
+	public void setCondition(int conditionID) {
+		switch(conditionID)
+		{
+		case 1:
+			this.condition = ConditionType.EXCELLENT;
+			break;
+		case 2: 
+			this.condition = ConditionType.GOOD;
+			break;
+		case 3: 
+			this.condition = ConditionType.FAIR;
+			break;
+		case 4:
+			this.condition = ConditionType.POOR; 
+			break;
+		}
 	}
-
 	
-	//methods
+	public int getOwnership(){
+		switch(ownerShip)
+		{
+		case FORSALE: 
+			return 1;
+		case OWNED: 
+			return 2;
+		default:
+			return 1;
+		}
+	}
+
+	public void setOwnership(int ownershipTypeNum){
+		switch(ownershipTypeNum)
+		{
+		case 1:
+			this.ownerShip = OwnershipType.FORSALE;
+			break;
+		case 2: 
+			this.ownerShip = OwnershipType.OWNED;
+			break;
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + carID;
 		result = prime * result + ((color == null) ? 0 : color.hashCode());
 		result = prime * result + ((condition == null) ? 0 : condition.hashCode());
 		result = prime * result + ((make == null) ? 0 : make.hashCode());
 		result = prime * result + ((model == null) ? 0 : model.hashCode());
-		result = prime * result + year;
+		result = prime * result + ((ownerShip == null) ? 0 : ownerShip.hashCode());
+		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		return result;
 	}
 
@@ -99,6 +178,8 @@ public class Car {
 		if (getClass() != obj.getClass())
 			return false;
 		Car other = (Car) obj;
+		if (carID != other.carID)
+			return false;
 		if (color == null) {
 			if (other.color != null)
 				return false;
@@ -116,16 +197,19 @@ public class Car {
 				return false;
 		} else if (!model.equals(other.model))
 			return false;
-		if (year != other.year)
+		if (ownerShip != other.ownerShip)
+			return false;
+		if (year == null) {
+			if (other.year != null)
+				return false;
+		} else if (!year.equals(other.year))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Car [year=" + year + ", make=" + make + ", model=" + model + ", color=" + color + ", condition="
-				+ condition + ", ownerShip=" + ownerShip + "]";
-	}
-
-	
+		return "Car [carID=" + carID + ", year=" + year + ", make=" + make + ", model=" + model + ", color=" + color
+				+ ", condition=" + condition + ", ownerShip=" + ownerShip + "]";
+	}		
 }
