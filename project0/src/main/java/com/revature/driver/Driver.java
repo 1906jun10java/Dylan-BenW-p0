@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import com.revature.beans.Car;
 import com.revature.beans.User;
+import com.revature.daoimpl.CarDAOImpl;
 import com.revature.daoimpl.UserDAOImpl;
 import com.revature.enums.UserType;
 import com.revature.enums.ConditionType;
@@ -18,10 +19,15 @@ public class Driver {
 	{
 		Scanner kb = new Scanner(System.in);
 		UserDAOImpl udi = new UserDAOImpl();
+		CarDAOImpl cdi = new CarDAOImpl();
 		
 		ArrayList<User> users = udi.readAllUsers();
-
-		ArrayList<Car> carsOnLot = new ArrayList<Car>();
+		ArrayList<Car> carsOnLot = cdi.readAllCars();
+		
+		/*
+		 * THIS IS TO INSERT A NEW CAR INTO DATABASE FROM AND EMPLOYEE ACCOUNT
+		 */
+		cdi.createCar("2019", "Type C", "Telsa", "Black", 1, 1, 1);
 	
 	/* THIS IS TO INSERT A NEW USER INTO DATABASE FROM AN EMPLOYEE ACCOUNT	
 		User todd = new User(users.size()+1, "Todd", "Stevens", "hottytoddy", "passw0rd123", 3);
