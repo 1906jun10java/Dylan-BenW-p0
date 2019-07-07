@@ -1,6 +1,7 @@
 package com.revature.beans;
 
 import java.util.ArrayList;
+import org.apache.log4j.Logger;
 
 import com.revature.enums.UserType;
 
