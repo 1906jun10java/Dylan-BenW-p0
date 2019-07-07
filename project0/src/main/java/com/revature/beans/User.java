@@ -1,5 +1,6 @@
 package com.revature.beans;
 
+import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;

@@ -2,6 +2,7 @@ package com.revature.beans;
 
 import com.revature.enums.ConditionType;
 import com.revature.enums.OwnershipType;
+import org.apache.log4j.Logger;
 
 public class Car {
 	
