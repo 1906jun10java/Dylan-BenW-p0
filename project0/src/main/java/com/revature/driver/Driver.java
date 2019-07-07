@@ -3,7 +3,11 @@ package com.revature.driver;
 import java.awt.Menu;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import com.revature.beans.Car;
 import com.revature.beans.User;
@@ -17,6 +21,8 @@ public class Driver {
 	static public Scanner kb = new Scanner(System.in);
 	static public UserDAOImpl udi = new UserDAOImpl();
 	static public CarDAOImpl cdi = new CarDAOImpl();
+	private static final Logger log4j = LogManager.getLogger(Driver.class);
+	 
 	
 	public static void main(String[] args) 
 	{		
@@ -35,7 +41,21 @@ public class Driver {
 		while(menuInput > 3 || menuInput < 1)
 		{
 			System.out.println(introMenu());
-			menuInput = kb.nextInt();
+			try {
+				menuInput = kb.nextInt();
+			}
+			catch(InputMismatchException inputException)
+			{
+				log4j.error("The client entered something other than a number");
+				menuInput = 0;
+				continue;
+			}
+			catch(Exception e)
+			{
+				menuInput = 0;
+				continue;
+			}
+			
 			if(3 < menuInput || menuInput < 1)
 			{
 				System.out.println("Invalid option, please try again.");
@@ -90,13 +110,16 @@ public class Driver {
 		
 		//check if username and password match anything in the system
 		//if not get username and password again. print if they do not have an account contact dealership
-		for(User user : users)
-		{
-			if(user.getUsername().equals(inputUsername))
+		if(users != null)
+		{	
+			for(User user : users)
 			{
-				if(user.getPassword().equals(inputPassword))
+				if(user.getUsername().equals(inputUsername))
 				{
-					loggedIn = user;
+					if(user.getPassword().equals(inputPassword))
+					{
+						loggedIn = user;
+					}
 				}
 			}
 		}
@@ -146,12 +169,18 @@ public class Driver {
 	
 	public static void assignCars(User loggedin, ArrayList<Car> cars)
 	{
-		for(int i = 0; i <= cars.size()-1; i++)
+		if(loggedin != null)
 		{
-			if(cars.get(i).getUserID() == loggedin.getUserID())
+			for(int i = 0; i <= cars.size()-1; i++)
 			{
-				loggedin.getOwnedCars().add(cars.get(i));
+				if(cars.get(i).getUserID() == loggedin.getUserID())
+				{
+					loggedin.getOwnedCars().add(cars.get(i));
+				}
 			}
+		}
+		else {
+			System.out.println("There is not a valid person loggedin, goodbye");
 		}
 	}
 
