@@ -16,9 +16,9 @@ public class UserDAOImpl implements UserDAO
 {
 	public static ConnFactory cf = ConnFactory.getInstance();
 	
-	public void createUser(String FIRSTNAME, String LASTNAME, String USERNAME, String PASSW0RD, int USERTYPEID) throws SQLException
+	public ArrayList<User> createUser(String FIRSTNAME, String LASTNAME, String USERNAME, String PASSW0RD, int USERTYPEID) throws SQLException
 	{
-		
+		ArrayList<User> userList = new ArrayList<User>();
 		Connection conn = cf.getConnection();
 		String sql = "{ call INSERTUSER(?, ?, ?, ?, ?)";
 		CallableStatement call = conn.prepareCall(sql);
@@ -28,6 +28,28 @@ public class UserDAOImpl implements UserDAO
 		call.setString(4, PASSW0RD);
 		call.setInt(5, USERTYPEID);
 		call.execute();
+		
+		Statement stmt;
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM US3R");
+			User u = null;
+			while(rs.next())
+			{
+				u = new User(rs.getInt(1), //int userID
+								rs.getString(2), //String firstName
+								rs.getString(3), //String lastName
+								rs.getString(4), //String username
+								rs.getString(5), //String password
+								rs.getInt(6));	 //int titleNum
+								
+				userList.add(u);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return userList;
 	}
 
 	public ArrayList<User> readAllUsers() {
