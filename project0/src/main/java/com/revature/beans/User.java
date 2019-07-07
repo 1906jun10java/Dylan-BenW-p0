@@ -1,12 +1,15 @@
 package com.revature.beans;
 
 import org.apache.log4j.Logger;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.revature.daoimpl.CarDAOImpl;
 import com.revature.daoimpl.UserDAOImpl;
+import com.revature.enums.OwnershipType;
 import com.revature.enums.UserType;
 
 public class User {
@@ -123,7 +126,7 @@ public class User {
 	}
 	
 	//methods
-	public void menu(Scanner kb)
+	public void menu(Scanner kb) throws SQLException
 	{
 		int menuInput = 0;
 		while(menuInput != 5)
@@ -222,6 +225,37 @@ public class User {
 						int newUserID = 1;
 						cdi.createCar(newYear, newMake, newModel, newColor, newConditionTypeID, newOwnershipTypeID, newUserID);
 						System.out.println("The car has been created and saved.");
+						break;
+					case 3:
+						int optionCarID = 0;
+						while(optionCarID == 0)
+						{
+							try {
+								System.out.println("Please input the carID of which you would like to delete.");
+								for(Car c : cdi.readAllCars())
+								{
+									if(c.getOwnershipType() == OwnershipType.FORSALE)
+									{
+										System.out.println(c.toString());
+									}
+								}
+								optionCarID = kb.nextInt();
+								cdi.deleteCar(optionCarID);
+								System.out.println("Car has been succesfully deleted.");
+							}
+							catch(InputMismatchException inputException)
+							{
+								System.out.println("That is not a valid carID please try again");
+								optionCarID = 0;
+								continue;
+							}
+							catch(Exception e)
+							{
+								System.out.println("Something went wrong.");
+								optionCarID = 0;
+								continue;
+							}
+						}
 						break;
 					case 5:
 						System.out.println("Goodbye");
