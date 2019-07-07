@@ -31,12 +31,13 @@ public class Car {
 		switch(ownershipTypeNum)
 		{
 		case 1: 
-			this.ownerShip = OwnershipType.OWNED;
+			this.ownerShip = OwnershipType.FORSALE;
 			break;
 		case 2: 
-			this.ownerShip = OwnershipType.FORSALE; 
+			this.ownerShip = OwnershipType.OWNED; 
 			break;
 		}
+		this.userID = userID;
 	}
 
 	private int carID;
@@ -46,8 +47,26 @@ public class Car {
 	private String color;
 	private ConditionType condition = ConditionType.GOOD;
 	private OwnershipType ownerShip = OwnershipType.FORSALE;
+	private int userID = 1;
 	
 	//getters and setters
+	public int getUserID()
+	{
+		return userID;
+	}
+	
+	public void setUserID(int userID)
+	{
+		if(userID == 1)
+		{
+			this.ownerShip = OwnershipType.FORSALE;
+		}
+		else
+		{
+			this.ownerShip = OwnershipType.OWNED;
+		}
+	}
+	
 	public OwnershipType getOwnerShip() {
 		return ownerShip;
 	}
@@ -210,7 +229,7 @@ public class Car {
 
 	@Override
 	public String toString() {
-		return "Car [carID=" + carID + ", year=" + year + ", make=" + make + ", model=" + model + ", color=" + color
-				+ ", condition=" + condition + ", ownerShip=" + ownerShip + "]";
+		return "Car [Year = " + year + ", Make = " + make + ", Model = " + model + ", Color = " + color
+				+ ", Condition = " + condition + ", Ownership = " + ownerShip + "]";
 	}		
 }
