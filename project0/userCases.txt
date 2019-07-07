@@ -1,0 +1,18 @@
+## User Stories
+
+* As the system, I update a car to an owned state when an offer is accepted.
+* As the system, I reject all other pending offers for a car when an offer is accepted.
+* As the system, I can calculate the monthly payment.
+
+* As a user, I can login. - DONE
+* As a user, I can register for a customer account. - DONE
+
+* As a customer, I can view the cars on the lot. - DONE
+* As a customer, I can make an offer for a car.
+* As a customer, I can view the cars that I own. - DONE
+* As a customer, I can view my remaining payments for a car.
+
+* As an employee, I can add a car to the lot. - DONE
+* As an employee, I can accept or reject a pending offer for a car.
+* As an employee, I can remove a car from the lot.
+* As an employee, I can view all payments.

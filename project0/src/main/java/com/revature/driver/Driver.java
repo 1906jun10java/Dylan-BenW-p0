@@ -14,34 +14,66 @@ import com.revature.enums.ConditionType;
 import com.revature.enums.OwnershipType;
 
 public class Driver {
+	static public Scanner kb = new Scanner(System.in);
+	static public UserDAOImpl udi = new UserDAOImpl();
+	static public CarDAOImpl cdi = new CarDAOImpl();
 	
 	public static void main(String[] args) 
-	{
-		Scanner kb = new Scanner(System.in);
-		UserDAOImpl udi = new UserDAOImpl();
-		CarDAOImpl cdi = new CarDAOImpl();
-		
+	{		
 		ArrayList<User> users = udi.readAllUsers();
 		ArrayList<Car> carsOnLot = cdi.readAllCars();
+		
+		int menuInput = 0;
+		User loggedin = null;
 		
 		/*
 		 * THIS IS TO INSERT A NEW CAR INTO DATABASE FROM AND EMPLOYEE ACCOUNT
 		 */
-		cdi.createCar("2019", "Type C", "Telsa", "Black", 1, 1, 1);
-	
-	/* THIS IS TO INSERT A NEW USER INTO DATABASE FROM AN EMPLOYEE ACCOUNT	
-		User todd = new User(users.size()+1, "Todd", "Stevens", "hottytoddy", "passw0rd123", 3);
-	
-		try {
-			udi.createUser("Todd", "Stevens", "hottytoddy", "passw0rd123", 3);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	*/
+		//cdi.createCar("2019", "Type C", "Telsa", "Black", 1, 1, 1);
 		
-/*
-		System.out.println("Welcome to Ben & Dylan's car lot.");
+		//initial menu options
+		while(menuInput > 3 || menuInput < 1)
+		{
+			System.out.println(introMenu());
+			menuInput = kb.nextInt();
+			if(3 < menuInput || menuInput < 1)
+			{
+				System.out.println("Invalid option, please try again.");
+				continue;
+			}
+			switch(menuInput)
+			{
+			case 1:
+				loggedin = userLogin(users);
+				break;
+			case 2:
+				loggedin = createNewUser();
+				break;
+			case 3:
+				System.out.println("Goodbye");
+				System.exit(-1);
+			}
+		}	
+		
+		//based on the loggedin users type it prints a certain menu from the user class
+		System.out.println("Welcome " + loggedin.getFirstName() + " " + loggedin.getLastName() + " what would you like to do?");
+		assignCars(loggedin, carsOnLot);
+		loggedin.menu(kb);
+		kb.close();
+	}
+	
+	//menu methods
+	public static String introMenu()
+	{
+		return "Welcome to Ben & Dylan's car lot." + "\n" +
+					"What would you like to do?" + "\n" +
+					"1. Log-in" + "\n" +
+					"2. Create new account" + "\n" +
+					"3. Exit";
+	}
+	
+	public static User userLogin(ArrayList<User> users) //returns a user based on username and password from client
+	{
 		User loggedIn = null;
 		
 		//ask for username & password
@@ -68,29 +100,54 @@ public class Driver {
 			System.out.println("There is no username/password this that information.");
 			System.exit(-1);
 		}
+		return loggedIn;
+	}
+	
+	public static User createNewUser() //creates a new user and send to database and returns that new user
+	{		
+		System.out.println("What is your first name?");
+		String newFirstName = kb.next();
 		
-		//once logged in, display menu from User class .menu() based on UserType
-		loggedIn.menu();
+		System.out.println("What is your last name?");
+		String newLastName = kb.next();
 		
-		loggedIn.getOwnedCars().add(carsOnLot.get(0));
-		carsOnLot.remove(0);
-		//get a int from the client
+		System.out.println("What woud you like your username to be?");
+		String newUsername = kb.next();
 		
-		//go from there...
-		System.out.println(loggedIn.toString());
+		System.out.println("What would you like your password to be?");
+		String newPassword = kb.next();
 		
-		
-		loggedIn.getOwnedCars().get(0).setOwnerShip(OwnershipType.OWNED);
-		
-		
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++" + "\n" +
-							loggedIn.toString() + "\n" +
-							"++++++++++++++++++++++++++++++++++++++++++++++");
-		
-		System.out.println("Printing cars on the lot :" + carsOnLot.toString());
-
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++" + "\n" +
-							loggedIn.toString());  */
+		System.out.println("By default your new account will be setup for a \"Customer\" account.");
+	
+		ArrayList<User> users;
+		try {
+			users = udi.createUser(newFirstName, newLastName, newUsername, newPassword, 3);
+			for(User user : users)
+			{
+				if(user.getUsername().equals(newUsername))
+				{
+					if(user.getPassword().equals(newPassword))
+					{
+						 return user;
+					}
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static void assignCars(User loggedin, ArrayList<Car> cars)
+	{
+		for(int i = 0; i <= cars.size()-1; i++)
+		{
+			if(cars.get(i).getUserID() == loggedin.getUserID())
+			{
+				loggedin.getOwnedCars().add(cars.get(i));
+			}
+		}
 	}
 
 }
