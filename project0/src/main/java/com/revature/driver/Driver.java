@@ -58,7 +58,12 @@ public class Driver {
 		//based on the loggedin users type it prints a certain menu from the user class
 		System.out.println("Welcome " + loggedin.getFirstName() + " " + loggedin.getLastName() + " what would you like to do?");
 		assignCars(loggedin, carsOnLot);
-		loggedin.menu(kb);
+		try {
+			loggedin.menu(kb);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		kb.close();
 	}
 	

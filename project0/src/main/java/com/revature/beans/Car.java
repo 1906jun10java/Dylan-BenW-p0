@@ -67,11 +67,11 @@ public class Car {
 		}
 	}
 	
-	public OwnershipType getOwnerShip() {
+	public OwnershipType getOwnershipType() {
 		return ownerShip;
 	}
 
-	public void setOwnerShip(OwnershipType ownerShip) {
+	public void setOwnershipType(OwnershipType ownerShip) {
 		this.ownerShip = ownerShip;
 	}
 	
@@ -229,7 +229,9 @@ public class Car {
 
 	@Override
 	public String toString() {
-		return "Car [Year = " + year + ", Make = " + make + ", Model = " + model + ", Color = " + color
-				+ ", Condition = " + condition + ", Ownership = " + ownerShip + "]";
-	}		
+		return "Car [carID=" + carID + ", year=" + year + ", make=" + make + ", model=" + model + ", color=" + color
+				+ ", condition=" + condition + ", ownerShip=" + ownerShip + ", userID=" + userID + "]";
+	}
+
+			
 }

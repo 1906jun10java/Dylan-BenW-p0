@@ -12,4 +12,6 @@ public interface CarDAO {
 			
 			public abstract List<Car> readAllCars() throws SQLException;
 			
+			public abstract void deleteCar(int carID) throws SQLException;
+			
 }

@@ -70,4 +70,17 @@ public class CarDAOImpl implements CarDAO
 		}
 		return carList;
 	}
+	
+	public void deleteCar(int carID)
+	{
+		Connection conn = cf.getConnection();
+		String sql = "{ call DELETECAR(?)";
+		try {
+			CallableStatement call = conn.prepareCall(sql);
+			call.setInt(1, carID);
+			call.execute();
+		} catch (SQLException e) {
+			System.out.println("That car does not exist in the database try again.");
+		}
+	}
 }

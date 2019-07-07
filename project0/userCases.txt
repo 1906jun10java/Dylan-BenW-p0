@@ -14,5 +14,15 @@
 
 * As an employee, I can add a car to the lot. - DONE
 * As an employee, I can accept or reject a pending offer for a car.
-* As an employee, I can remove a car from the lot.
+* As an employee, I can remove a car from the lot. - DONE
 * As an employee, I can view all payments.
+
+##Requirements
+1. Functionality should reflect the below user stories. 6/13
+2. Data is stored in a database. - DONE
+3. A custom stored procedure is called to perform some portion of the functionality. - DONE
+4. Data Access is performed through the use of JDBC in a data layer consisting of Data Access Objects. - DONE
+5. All input is received using the java.util.Scanner class. - DONE
+6. Log4j is implemented to log events to a file. - DONE
+7. A minimum of one (1) JUnit test is written to test some functionality. - DONE
+
