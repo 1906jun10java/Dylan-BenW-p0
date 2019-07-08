@@ -47,8 +47,4 @@ public class ConnFactory {
 		}
 		return conn;
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 0d66c135b5372e0f3864570ad9970af3d3411c17

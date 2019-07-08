@@ -2,45 +2,106 @@ package com.revature.beans;
 
 import com.revature.enums.ConditionType;
 import com.revature.enums.OwnershipType;
+import org.apache.log4j.Logger;
 
 public class Car {
-
-	//constructors
-	public Car() {
-		// TODO Auto-generated constructor stub
-	}
 	
-	public Car(int year, String make, String model, String color, ConditionType condition) {
+	public Car(int carID, String year, String make, String model, String color, int conditionNum, int ownershipTypeNum, int userID, double price) {
 		super();
+		this.carID = carID;
 		this.year = year;
 		this.make = make;
 		this.model = model;
 		this.color = color;
-		this.condition = condition;
+		switch(conditionNum)
+		{
+		case 1:
+			this.condition = ConditionType.EXCELLENT;
+			break;
+		case 2: 
+			this.condition = ConditionType.GOOD; 
+			break;
+		case 3:
+			this.condition = ConditionType.FAIR; 
+			break;
+		case 4: 
+			this.condition = ConditionType.POOR;
+			break;
+		}
+		switch(ownershipTypeNum)
+		{
+		case 1: 
+			this.ownerShip = OwnershipType.FORSALE;
+			break;
+		case 2: 
+			this.ownerShip = OwnershipType.OWNED; 
+			break;
+		}
+		this.userID = userID;
+		this.price = price;
 	}
 
-
-	private int year;
+	private int carID;
+	private String year;
 	private String make;
 	private String model;
 	private String color;
 	private ConditionType condition = ConditionType.GOOD;
 	private OwnershipType ownerShip = OwnershipType.FORSALE;
+	private int userID = 1;
+	private double price;
 	
 	//getters and setters
-	public OwnershipType getOwnerShip() {
+	public double getPrice()
+	{
+		return price;
+	}
+	
+	public void setPrice(double price)
+	{
+		this.price = price;
+	}
+	
+	public int getUserID()
+	{
+		return userID;
+	}
+	
+	public void setUserID(int userID)
+	{
+		if(userID == 1)
+		{
+			this.ownerShip = OwnershipType.FORSALE;
+		}
+		else
+		{
+			this.ownerShip = OwnershipType.OWNED;
+		}
+	}
+	
+	public OwnershipType getOwnershipType() {
 		return ownerShip;
 	}
 
-	public void setOwnerShip(OwnershipType ownerShip) {
+	public void setOwnershipType(OwnershipType ownerShip) {
 		this.ownerShip = ownerShip;
 	}
 	
-	public int getYear() {
+	public int getCarID()
+	{
+		return carID;
+	}
+	
+	public void setCarID(int carID)
+	{
+		this.carID = carID;
+	}
+	
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 
@@ -72,21 +133,63 @@ public class Car {
 		return condition;
 	}
 
-	public void setCondition(ConditionType condition) {
-		this.condition = condition;
+	public void setCondition(int conditionID) {
+		switch(conditionID)
+		{
+		case 1:
+			this.condition = ConditionType.EXCELLENT;
+			break;
+		case 2: 
+			this.condition = ConditionType.GOOD;
+			break;
+		case 3: 
+			this.condition = ConditionType.FAIR;
+			break;
+		case 4:
+			this.condition = ConditionType.POOR; 
+			break;
+		}
+	}
+	
+	public int getOwnership(){
+		switch(ownerShip)
+		{
+		case FORSALE: 
+			return 1;
+		case OWNED: 
+			return 2;
+		default:
+			return 1;
+		}
 	}
 
-	
-	//methods
+	public void setOwnership(int ownershipTypeNum){
+		switch(ownershipTypeNum)
+		{
+		case 1:
+			this.ownerShip = OwnershipType.FORSALE;
+			break;
+		case 2: 
+			this.ownerShip = OwnershipType.OWNED;
+			break;
+		}
+	}	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + carID;
 		result = prime * result + ((color == null) ? 0 : color.hashCode());
 		result = prime * result + ((condition == null) ? 0 : condition.hashCode());
 		result = prime * result + ((make == null) ? 0 : make.hashCode());
 		result = prime * result + ((model == null) ? 0 : model.hashCode());
-		result = prime * result + year;
+		result = prime * result + ((ownerShip == null) ? 0 : ownerShip.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(price);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + userID;
+		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		return result;
 	}
 
@@ -99,6 +202,8 @@ public class Car {
 		if (getClass() != obj.getClass())
 			return false;
 		Car other = (Car) obj;
+		if (carID != other.carID)
+			return false;
 		if (color == null) {
 			if (other.color != null)
 				return false;
@@ -116,16 +221,25 @@ public class Car {
 				return false;
 		} else if (!model.equals(other.model))
 			return false;
-		if (year != other.year)
+		if (ownerShip != other.ownerShip)
+			return false;
+		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+			return false;
+		if (userID != other.userID)
+			return false;
+		if (year == null) {
+			if (other.year != null)
+				return false;
+		} else if (!year.equals(other.year))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Car [year=" + year + ", make=" + make + ", model=" + model + ", color=" + color + ", condition="
-				+ condition + ", ownerShip=" + ownerShip + "]";
+		return year + " " + make + " " + model + " ," + color
+				+ " " + condition + " condition, Price: $" + price + "]";
 	}
 
-	
+			
 }
