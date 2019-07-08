@@ -8,6 +8,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.revature.daoimpl.CarDAOImpl;
+import com.revature.daoimpl.OfferDAOImpl;
 import com.revature.daoimpl.UserDAOImpl;
 import com.revature.enums.OwnershipType;
 import com.revature.enums.UserType;
@@ -15,6 +16,7 @@ import com.revature.enums.UserType;
 public class User {
 	static public UserDAOImpl udi = new UserDAOImpl();
 	static public CarDAOImpl cdi = new CarDAOImpl();
+	static public OfferDAOImpl odi = new OfferDAOImpl();
 	
 	public User(int userID, String firstName, String lastName, String username, String password, int titleNum) {
 		super();		
@@ -150,16 +152,50 @@ public class User {
 					}
 					switch(menuInput)
 					{
-					case 1:
-						ArrayList<Car> carsOnLot = cdi.readAllCars();
+					case 1: //prints all cars on the lot to the screen
 						System.out.println("Printing all cars that are on the lot.");
-						for(Car c : carsOnLot)
-						{
+						for(Car c : cdi.readAllCars()) //loops through the car list from the database
+						{							   //and prints each cars toString
 							System.out.println(c.toString());
 						}
 						break;
+						
+					case 2: //make an offer on a car
+						ArrayList<Car> cars = cdi.readAllCars(); //read in the CAR table
+						System.out.println("These are the cars for sale.");
+						int counter = 1;
+						for(Car c : cdi.readAllCars()) //prints only cars that are for sale
+						{
+							if(c.getOwnershipType() == OwnershipType.FORSALE)
+							{
+								System.out.println(counter + ". " + c.toString());
+							}
+							counter++;
+						}
+						int carSelection = 0;
+						while(carSelection < 1 || carSelection > cars.size())
+						{
+							System.out.println("Please enter the number for the car you would like to make an offer on.");
+							carSelection = kb.nextInt() - 1;
+							if(carSelection < 1 || carSelection > cars.size())
+							{
+								System.out.println("That is not a valid option, please try again.");
+								carSelection = 0;
+								continue;
+							}
+						}
+						
+						System.out.println("What is your offer on the car?");
+						double offerPrice = kb.nextDouble();
+						odi.createNewOffer(this.userID, cars.get(carSelection).getCarID(), offerPrice);
+						//adds a new offer to the database
+						
+						System.out.println("Thank you, you will be notified when your offer is accepted/declined");						
+						break;
+						
 					case 3:
-						System.out.println(this.ownedCars());
+						System.out.println("You own these cars." + "\n" +
+											this.ownedCars());
 						break;
 					case 5:
 						System.out.println("Goodbye");
@@ -223,8 +259,76 @@ public class User {
 						}
 						int newOwnershipTypeID = 1;
 						int newUserID = 1;
-						cdi.createCar(newYear, newMake, newModel, newColor, newConditionTypeID, newOwnershipTypeID, newUserID);
+						System.out.println("What is the price of the car? E.g. 12000.00");
+						double newPrice = kb.nextDouble();
+						cdi.createCar(newYear, newMake, newModel, newColor, newConditionTypeID, newOwnershipTypeID, newUserID, newPrice);
 						System.out.println("The car has been created and saved.");
+						break;
+					case 2:
+						System.out.println("Printing all pending offers.");
+						ArrayList<Offer> offerList = odi.readAllOffers();
+						ArrayList<Car> cars = cdi.readAllCars();
+						for(Offer o : offerList)
+						{
+							System.out.println(o.toString());
+						}
+						System.out.println("Enter the offerID you would like to accept/decline.");
+						int inputOption = 0;
+						while(inputOption == 0)
+						{
+							try
+							{
+								inputOption = kb.nextInt();
+								if(inputOption < 1 || inputOption > offerList.size())
+								{
+									throw new InputMismatchException();
+								}
+								
+							}
+							catch(InputMismatchException ex)
+							{
+								System.out.println("Invalid option, try again.");
+								inputOption = 0;
+								continue;
+							}
+						}
+						Offer o = offerList.get(inputOption-1);
+						System.out.println("Would you like to accept or decline this offer?" + "\n" +
+											"1. Accept" + "\n" +
+											"2. Decline");
+						inputOption = 0;
+						while(inputOption == 0)
+						{
+							try
+							{
+								inputOption = kb.nextInt();
+								if(inputOption < 1 || inputOption > 2)
+								{
+									throw new InputMismatchException();
+								}
+							}
+							catch(InputMismatchException ex)
+							{
+								System.out.println("Invalid option, try again.");
+								inputOption = 0;
+								continue;
+							}
+						}
+						if(inputOption == 1)
+						{
+							//set the UserId and OwnershipType of the carID in the offer for the car
+							User u = udi.readUser(o.getUserID());
+							Car c = cdi.readCar(o.getCarID());
+							c.setOwnershipType(OwnershipType.OWNED);
+							cdi.updateCar(c.getCarID(), u.getUserID());
+						}
+						else if(inputOption == 2) //deletes an offer from the database on the offerID
+						{
+							odi.deleteOffer(o.getOfferID());
+						}
+						
+						
+						
 						break;
 					case 3:
 						int optionCarID = 0;
@@ -265,9 +369,8 @@ public class User {
 				menuInput = 0;
 				break;
 			case ADMIN:
-					System.out.println("Please select an option from below. I.E. 1,2,3" + "\n" + 
-					"1. Update a car to owned following offer acceptance." + "/n" +
-					"2. Calculate monthly payment." + "\n" +
+					System.out.println("Please select an option from below. I.E. 1,2,3" + "\n" +
+					"1. Calculate monthly payment." + "\n" +
 					"5. Exit");
 				break;
 				default:
@@ -288,8 +391,8 @@ public class User {
 		String str = "";
 		for(Car car : this.ownedCars)
 		{
-			str += "Car [Year = " + car.getYear() + ", Make = " + car.getMake() + ", Model = " + car.getModel() + ", Color = " + car.getColor()
-				+ ", Condition = " + car.getCondition() + "\n";
+			str += car.getYear() + " " + car.getMake() + " " + car.getModel() + ", " + car.getColor()
+			+ " " + car.getCondition() + " " + "condition" + "\n";
 		}
 		
 		return str;

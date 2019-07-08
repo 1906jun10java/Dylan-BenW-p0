@@ -2,12 +2,14 @@ package com.revature.daoimpl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revature.beans.Car;
 import com.revature.beans.User;
 import com.revature.dao.UserDAO;
 import com.revature.util.ConnFactory;
@@ -76,5 +78,32 @@ public class UserDAOImpl implements UserDAO
 			e.printStackTrace();
 		}
 		return userList;
+	}
+	
+	public User readUser(int USERID)
+	{
+		User u = null;
+		Connection conn = cf.getConnection();
+		Statement stmt;
+		try
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM US3R WHERE USERID = ?");
+			while(rs.next())
+			{
+				u = new User(rs.getInt(1),		 //int userID
+						rs.getString(2), //string firstName
+						rs.getString(3), //String lastName
+						rs.getString(4), //String username
+						rs.getString(5), //String password
+						rs.getInt(6));   //int titleNum
+			}
+		}
+		catch(SQLException ex)
+		{
+			System.out.println("Could not find that user.");
+			System.exit(-1);
+		}
+		return u;
 	}
 }

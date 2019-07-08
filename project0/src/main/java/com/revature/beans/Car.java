@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 public class Car {
 	
-	public Car(int carID, String year, String make, String model, String color, int conditionNum, int ownershipTypeNum, int userID) {
+	public Car(int carID, String year, String make, String model, String color, int conditionNum, int ownershipTypeNum, int userID, double price) {
 		super();
 		this.carID = carID;
 		this.year = year;
@@ -38,6 +38,7 @@ public class Car {
 			break;
 		}
 		this.userID = userID;
+		this.price = price;
 	}
 
 	private int carID;
@@ -48,8 +49,19 @@ public class Car {
 	private ConditionType condition = ConditionType.GOOD;
 	private OwnershipType ownerShip = OwnershipType.FORSALE;
 	private int userID = 1;
+	private double price;
 	
 	//getters and setters
+	public double getPrice()
+	{
+		return price;
+	}
+	
+	public void setPrice(double price)
+	{
+		this.price = price;
+	}
+	
 	public int getUserID()
 	{
 		return userID;
@@ -117,20 +129,8 @@ public class Car {
 		this.color = color;
 	}
 
-	public int getCondition() {
-		switch(condition)
-		{
-		case EXCELLENT: 
-			return 1;
-		case GOOD:
-			return 2;
-		case FAIR:
-			return 3;
-		case POOR:
-			return 4;
-		default:
-			return 2;
-		}
+	public ConditionType getCondition() {
+		return condition;
 	}
 
 	public void setCondition(int conditionID) {
@@ -173,7 +173,7 @@ public class Car {
 			this.ownerShip = OwnershipType.OWNED;
 			break;
 		}
-	}
+	}	
 
 	@Override
 	public int hashCode() {
@@ -185,6 +185,10 @@ public class Car {
 		result = prime * result + ((make == null) ? 0 : make.hashCode());
 		result = prime * result + ((model == null) ? 0 : model.hashCode());
 		result = prime * result + ((ownerShip == null) ? 0 : ownerShip.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(price);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + userID;
 		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		return result;
 	}
@@ -219,6 +223,10 @@ public class Car {
 			return false;
 		if (ownerShip != other.ownerShip)
 			return false;
+		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+			return false;
+		if (userID != other.userID)
+			return false;
 		if (year == null) {
 			if (other.year != null)
 				return false;
@@ -229,8 +237,8 @@ public class Car {
 
 	@Override
 	public String toString() {
-		return "Car [carID=" + carID + ", year=" + year + ", make=" + make + ", model=" + model + ", color=" + color
-				+ ", condition=" + condition + ", ownerShip=" + ownerShip + ", userID=" + userID + "]";
+		return year + " " + make + " " + model + " ," + color
+				+ " " + condition + " condition, Price: $" + price + "]";
 	}
 
 			
